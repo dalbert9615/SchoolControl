@@ -3,11 +3,12 @@ package db;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class DataBase {
     
-    public static void main(String[] args) {
+    public static void connectToDataBase() {
         Properties props = new Properties();
         try (FileInputStream fis = new FileInputStream("config/db.properties")) {
             props.load(fis);
@@ -20,7 +21,6 @@ public class DataBase {
         String password = props.getProperty("PASSWORD");
 
          try{
-            Class.forName("com.mysql.cj.jbdc.Driver");
             Connection connection = DriverManager.getConnection(dbUrl,user,password);
          }catch (SQLException e){
             e.printStackTrace();
