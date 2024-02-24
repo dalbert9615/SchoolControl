@@ -7,15 +7,17 @@ public class Career {
 	public Career() {
 
 	}
-
-	public Career(int id, String name) {
+	public Career(String name){
 		super();
-		this.id = id;
-		this.name = name;
+		this.setName(name);;
+	}
+	public Career(int id, String name) {
+		this(name);
+		this.setId(id);;
 	}
 
-	private int getId() {
-		return id;
+	public int getId() {
+		return this.id;
 	}
 
 	private void setId(int id) {
@@ -23,10 +25,11 @@ public class Career {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
+	/*No olvidar @Override toString() */
 }

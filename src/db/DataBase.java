@@ -1,10 +1,9 @@
 package db;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
+import java.sql.*;
+import java.util.*;
+import model.Career;
 
 public class DataBase {
 
@@ -18,7 +17,7 @@ public class DataBase {
             String dbUrl = props.getProperty("DB_URL");
             String user = props.getProperty("USER");
             String password = props.getProperty("PASSWORD");
-            Connection connection = DriverManager.getConnection(dbUrl, user, password);
+            this.connection = DriverManager.getConnection(dbUrl, user, password);
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
@@ -36,6 +35,39 @@ public class DataBase {
                 e.printStackTrace();
             }
         }
+    }
+
+    public boolean insertCareer(Career career){
+        boolean check=false;
+
+        String sql="INSERT INTO carreras (name) VALUES (?)";
+        try{
+            PreparedStatement statement=this.connection.prepareStatement(sql);
+            statement.setString(1, career.getName());
+            int rowsInserted=statement.executeUpdate();
+            check=rowsInserted>0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
+    public List<Career> getAllCareers(){
+        List<Career> careers = new ArrayList<>();
+        String sql="SELECT * FROM carreras";
+        try {
+            PreparedStatement statement=this.connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id=resultSet.getInt("id");
+                String name=resultSet.getString("nombre");
+                Career career=new Career(id,name);
+                careers.add(career);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return careers;
     }
 
 }
