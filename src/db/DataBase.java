@@ -7,23 +7,35 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DataBase {
-    
-    public static void connectToDataBase() {
-        Properties props = new Properties();
-        try (FileInputStream fis = new FileInputStream("config/db.properties")) {
+
+    private Connection connection;
+
+    public DataBase() {
+        try {
+            Properties props = new Properties();
+            FileInputStream fis = new FileInputStream("config/db.properties");
             props.load(fis);
-        } catch (IOException e) {
+            String dbUrl = props.getProperty("DB_URL");
+            String user = props.getProperty("USER");
+            String password = props.getProperty("PASSWORD");
+            Connection connection = DriverManager.getConnection(dbUrl, user, password);
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
+    }
 
-        String dbUrl = props.getProperty("DB_URL");
-        String user = props.getProperty("USER");
-        String password = props.getProperty("PASSWORD");
+    public Connection getConnection() {
+        return this.connection;
+    }
 
-         try{
-            Connection connection = DriverManager.getConnection(dbUrl,user,password);
-         }catch (SQLException e){
-            e.printStackTrace();
-         }
-    }  
+    public void closeConnection() {
+        if (this.connection != null) {
+            try {
+                this.connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
