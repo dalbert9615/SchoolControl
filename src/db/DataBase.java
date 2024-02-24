@@ -37,30 +37,49 @@ public class DataBase {
         }
     }
 
-    public boolean insertCareer(Career career){
-        boolean check=false;
-        String sql="INSERT INTO carreras (nombre) VALUES (?)";
-        try{
-            PreparedStatement statement=this.connection.prepareStatement(sql);
+    public boolean careerExists(Career career) {
+        boolean exists = false;
+        String sql = "SELECT COUNT(*) FROM carreras WHERE nombre LIKE ?";
+        try {
+            PreparedStatement statement = this.connection.prepareStatement(sql);
             statement.setString(1, career.getName());
-            int rowsInserted=statement.executeUpdate();
-            check=rowsInserted>0;
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next() && resultSet.getInt(1) > 0) {
+                exists = true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return exists;
+    }
+
+    public boolean insertCareer(Career career) {
+        boolean check = false;
+        String sql = "INSERT INTO carreras (nombre) VALUES (?)";
+        if (!careerExists(career)) {
+            try {
+                PreparedStatement statement = this.connection.prepareStatement(sql);
+                statement.setString(1, career.getName());
+                int rowsInserted = statement.executeUpdate();
+                check = rowsInserted > 0;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return check;
     }
 
-    public List<Career> getAllCareers(){
+    public List<Career> getAllCareers() {
         List<Career> careers = new ArrayList<>();
-        String sql="SELECT * FROM carreras";
+        String sql = "SELECT * FROM carreras";
         try {
-            PreparedStatement statement=this.connection.prepareStatement(sql);
+            PreparedStatement statement = this.connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int id=resultSet.getInt("id");
-                String name=resultSet.getString("nombre");
-                Career career=new Career(id,name);
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("nombre");
+                Career career = new Career(id, name);
                 careers.add(career);
             }
         } catch (SQLException e) {

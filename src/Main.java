@@ -15,14 +15,9 @@ public class Main {
              * 1.Create -> new career 
              * 2.Read -> careers or career
              * 3.Update -> fields of career 
-             * 4.Erase -> eliminate career 
+             * 4.Delete -> eliminate career 
              */
-            System.out.printf("1. Create Career \n");
-            System.out.printf("2. Show Careers \n");
-            System.out.printf("3. Update Career \n");
-            System.out.printf("4. Erase Career \n");
-            System.out.printf("0. Exit \n");
-            System.out.printf("Select one option \n");
+            System.out.println(showMenu());
             option = sc.nextInt();
             sc.nextLine();
 
@@ -38,6 +33,17 @@ public class Main {
             }
         } while (option != 0);
         db.closeConnection();
+    }
+
+    private static String showMenu(){
+        String output=
+            String.format("1. Create Career \n")+
+            String.format("2. Show Careers \n")+
+            String.format("3. Update Career \n")+
+            String.format("4. Delete Career \n")+
+            String.format("0. Exit \n")+
+            String.format("Select one option \n");
+        return output;
     }
 
     private static String addCareer(String name) {
