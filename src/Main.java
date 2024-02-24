@@ -11,8 +11,16 @@ public class Main {
     public static void main(String[] args) {
         int option;
         do {
-            System.out.printf("1. Insert Career \n");
+            /*MENU CRUD (about career)
+             * 1.Create -> new career 
+             * 2.Read -> careers or career
+             * 3.Update -> fields of career 
+             * 4.Erase -> eliminate career 
+             */
+            System.out.printf("1. Create Career \n");
             System.out.printf("2. Show Careers \n");
+            System.out.printf("3. Update Career \n");
+            System.out.printf("4. Erase Career \n");
             System.out.printf("0. Exit \n");
             System.out.printf("Select one option \n");
             option = sc.nextInt();
@@ -27,11 +35,9 @@ public class Main {
                 case 2:
                     System.out.println(showCareers());
                     break;
-                default:
-                    break;
             }
-
         } while (option != 0);
+        db.closeConnection();
     }
 
     private static String addCareer(String name) {

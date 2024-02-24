@@ -39,8 +39,7 @@ public class DataBase {
 
     public boolean insertCareer(Career career){
         boolean check=false;
-
-        String sql="INSERT INTO carreras (name) VALUES (?)";
+        String sql="INSERT INTO carreras (nombre) VALUES (?)";
         try{
             PreparedStatement statement=this.connection.prepareStatement(sql);
             statement.setString(1, career.getName());
