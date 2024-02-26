@@ -24,7 +24,9 @@ hs_err_pid*
 replay_pid*
 /bin/
 
+module-info
 .classpath
 .vscode
+.project
 bin/
 db.properties

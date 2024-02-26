@@ -8,7 +8,6 @@ public class Career {
 
 	}
 	public Career(String name){
-		super();
 		this.setName(name);;
 	}
 	public Career(int id, String name) {
@@ -31,5 +30,9 @@ public class Career {
 	public void setName(String name) {
 		this.name = name;
 	}
-	/*No olvidar @Override toString() */
+	
+	@Override
+	public String toString() {
+		return "Career [id=" + id + ", name=" + name + "]";
+	}
 }
