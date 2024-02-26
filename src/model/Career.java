@@ -31,5 +31,10 @@ public class Career {
 	public void setName(String name) {
 		this.name = name;
 	}
-	/*No olvidar @Override toString() */
+	
+	@Override
+	public String toString(){
+		return
+			String.format("%d : %s\n", this.getId(),this.getName());
+	}
 }

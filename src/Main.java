@@ -55,12 +55,47 @@ public class Main {
                     System.out.println("Write name of Career");
                     String name = sc.nextLine();
                     Career newCareer = new Career(name);
-                    System.out.println(careerDAO.createCareer(newCareer)); 
+                    System.out.println(careerDAO.createCareer(newCareer));
                     break;
                 case 2:
+                    if (careerDAO.getAllCareers() != null) {
+                        System.out.println(printAllCarrers(careerDAO.getAllCareers()));
+                    } else {
+                        System.out.println("Problem with database.");
+                    }
+                    break;
                 case 3:
+                    System.out.println("Write ID of career: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+                    if (careerDAO.getCareer(id) != null) {
+                        System.out.println(careerDAO.getCareer(id).toString());
+                    } else {
+                        System.out.println("Don't exits that career.");
+                    }
+                    break;
                 case 4:
+                    System.out.println("Write ID of career to Update: ");
+                    int idUpdate = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println("Write new name: ");
+                    String nameUpdate = sc.nextLine();
+                    Career careerUpdate = new Career(idUpdate, nameUpdate);
+                    if(careerDAO.updateCareer(careerUpdate)){
+                        System.out.println("Career update successfully.");
+                    } else {
+                        System.out.println("Don't exists that career.");
+                    }
+                    break;
                 case 5:
+                    System.out.println("Write ID of career to Delete");
+                    int idDelete = sc.nextInt();
+                    sc.nextLine();
+                    if (careerDAO.deleteCareer(idDelete)) {
+                        System.out.println("Career delete successfully.");
+                    } else {
+                        System.out.println("Error deleting career.");
+                    }
                     break;
                 case 6:
                     return;
@@ -69,6 +104,14 @@ public class Main {
             }
         }
 
+    }
+
+    private static String printAllCarrers(List<Career> careers) {
+        String output = "\n";
+        for (Career c : careers) {
+            output += c.toString();
+        }
+        return output;
     }
 
     private static String showCareerMenu() {
