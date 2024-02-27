@@ -3,9 +3,6 @@ package dao;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
-
-import com.mysql.cj.protocol.Resultset;
-
 import model.Career;
 
 public class CareerDAOImplement implements CareerDAO {
