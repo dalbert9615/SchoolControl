@@ -4,6 +4,7 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 import model.Career;
+import database.DBConnection;
 
 public class CareerDAOImplement implements CareerDAO {
 
@@ -13,26 +14,14 @@ public class CareerDAOImplement implements CareerDAO {
     private String user;
     private String password;
 
-    public CareerDAOImplement() {
-        Properties props = new Properties();
-        try (FileInputStream fis = new FileInputStream(PROPERTIES_FILE)) {
-            props.load(fis);
-            this.dbUrl = props.getProperty("DB_URL");
-            this.user = props.getProperty("USER");
-            this.password = props.getProperty("PASSWORD");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public String createCareer(Career career) {
         String response = "";
         if (!careerExist(career.getName())) {
             try {
-                Connection connection = DriverManager.getConnection(dbUrl, user, password);
+                //Connection connection = DriverManager.getConnection(dbUrl, user, password);
                 String sql = "INSERT INTO carreras (nombre) VALUES (?)";
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = DBConnection.getInstance().prepareStatement(sql);
                 statement.setString(1, career.getName());
                 if (statement.executeUpdate() > 0) {
                     response = "Career added successfully.";
@@ -50,9 +39,8 @@ public class CareerDAOImplement implements CareerDAO {
     private boolean careerExist(String name) {
         boolean check = false;
         try {
-            Connection connection = DriverManager.getConnection(dbUrl, user, password);
             String sql = "SELECT COUNT(*) FROM carreras WHERE nombre LIKE ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = DBConnection.getInstance().prepareStatement(sql);
             statement.setString(1, name);
             ResultSet resultset = statement.executeQuery();
             if (resultset.next()) {
@@ -68,9 +56,8 @@ public class CareerDAOImplement implements CareerDAO {
     public boolean updateCareer(Career career) {
         boolean check = false;
         try {
-            Connection connection = DriverManager.getConnection(dbUrl, user, password);
             String sql = "UPDATE carreras SET nombre = ? WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = DBConnection.getInstance().prepareStatement(sql);
             statement.setString(1, career.getName());
             statement.setInt(2, career.getId());
             check=statement.executeUpdate()>0;
@@ -88,9 +75,8 @@ public class CareerDAOImplement implements CareerDAO {
          */
         boolean check = false;
         try {
-            Connection connection = DriverManager.getConnection(dbUrl, user, password);
             String sql = "DELETE FROM carreras WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = DBConnection.getInstance().prepareStatement(sql);
             statement.setInt(1, id);
             check=statement.executeUpdate()>0;
         } catch (SQLException e) {
@@ -104,9 +90,8 @@ public class CareerDAOImplement implements CareerDAO {
         /* Tambien se podria buscar por nombre... etc */
         Career career = null;
         try {
-            Connection connection = DriverManager.getConnection(dbUrl, user, password);
             String sql = "SELECT * FROM carreras WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = DBConnection.getInstance().prepareStatement(sql);
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -122,9 +107,8 @@ public class CareerDAOImplement implements CareerDAO {
     public List<Career> getAllCareers() {
         List<Career> careers = new ArrayList<>();
         try {
-            Connection connection = DriverManager.getConnection(dbUrl, user, password);
             String sql = "SELECT * FROM carreras";
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = DBConnection.getInstance().prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 careers.add(new Career(resultSet.getInt("id"), resultSet.getString("nombre")));

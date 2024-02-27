@@ -3,11 +3,12 @@ import java.util.*;
 import dao.CareerDAO;
 import dao.CareerDAOImplement;
 import model.Career;
-
+import database.DBConnection;
 public class Main {
 
     public static void main(String[] args) {
     	
+//    	DBConnection.openConnection();
     	Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.println(showHomeMenu());
@@ -24,6 +25,7 @@ public class Main {
                 case 4:
                     break;
                 case 0:
+                	DBConnection.closeConnection();
                     System.exit(0);
                 default:
                     System.out.println("No valid option, try again.");
